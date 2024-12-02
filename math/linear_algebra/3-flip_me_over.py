@@ -10,7 +10,7 @@ def matrix_transpose(matrix):
         transposed (list): variable with transposed matrix
         return: a transpose matrix
     '''
-    transposed = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+    transposed = [[matrix[j][i] for j in range(len(matrix))]
+                  for i in range(len(matrix[0]))]
 
     return transposed
-
