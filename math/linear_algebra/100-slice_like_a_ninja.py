@@ -6,6 +6,7 @@ def np_slice(matrix, axes={}):
     '''this function returns a new numpy.ndarray of sliced matrix'''
     # find the number of axis
     num_axes = matrix.ndim
+    matrix_new = matrix.copy()
     print(f"dimentions {num_axes}")
 
     # slice
@@ -19,6 +20,6 @@ def np_slice(matrix, axes={}):
         slices[axis] = slice(*slice_range)
 
 
-    return matrix[tuple(slices)]
+    return matrix_new[tuple(slices)]
 
 
