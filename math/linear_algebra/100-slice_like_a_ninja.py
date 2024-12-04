@@ -14,7 +14,4 @@ def np_slice(matrix, axes={}):
     for axis, slice_range in axes.items():
         slices[axis] = slice(*slice_range)
 
-
     return matrix[tuple(slices)]
-
-
