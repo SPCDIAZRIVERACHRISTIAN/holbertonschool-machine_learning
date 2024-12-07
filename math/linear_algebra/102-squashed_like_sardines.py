@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''This function concatenates two matrices along a specific axis'''
 
+
 def cat_matrices(mat1, mat2, axis=0):
     '''
     Concatenates two matrices (nested lists) along a specified axis.
