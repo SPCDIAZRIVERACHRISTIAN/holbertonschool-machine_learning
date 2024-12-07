@@ -8,11 +8,11 @@ def add_matrices(mat1, mat2):
         matrix is only 1D it adds all elements.
 
     Args:
-        mat1 (list): Arrays that can be multidimensional
-        mat2 (list)): Arrays that can be multidimensional
+        mat1 (list): Arrays that can be multidimensional matrices
+        mat2 (list)): Arrays that can be multidimensional matrices
 
     Returns:
-        _type_: Returns a matrix with
+        list: Returns a matrix with added numbers of matrix
     '''
     # Checks if mat1 is a int or float
     # this is the part that adds lists of ints or floats
