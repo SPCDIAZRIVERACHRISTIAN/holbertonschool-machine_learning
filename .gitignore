@@ -1,2 +1,4 @@
 yamato.py
-pycache/
+__pycache__/
+practice.py
+main*
