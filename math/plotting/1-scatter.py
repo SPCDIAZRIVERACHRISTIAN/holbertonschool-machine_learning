@@ -19,4 +19,3 @@ def scatter():
     plt.ylabel('Weight (lbs)')
     plt.scatter(x, y, color='magenta')
     plt.show()
-
