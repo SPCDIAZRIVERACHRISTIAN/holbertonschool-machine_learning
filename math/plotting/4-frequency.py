@@ -4,6 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def frequency():
     '''This function shows a histogram'''
     np.random.seed(5)
