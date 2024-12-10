@@ -21,4 +21,5 @@ def two():
     plt.ylim(0, 1)
     plt.plot(x, y1, 'r--', label='c-14')
     plt.plot(x, y2, 'g', label='Ra-226')
+    plt.legend()
     plt.show()
