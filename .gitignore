@@ -2,3 +2,7 @@ yamato.py
 __pycache__/
 practice.py
 main*
+data.npy
+labels.npy
+pca.npz
+
