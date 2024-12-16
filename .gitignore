@@ -5,4 +5,4 @@ main*
 data.npy
 labels.npy
 pca.npz
-
+practice/
