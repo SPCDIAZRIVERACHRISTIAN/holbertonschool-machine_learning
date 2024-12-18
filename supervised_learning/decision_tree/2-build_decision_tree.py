@@ -91,7 +91,7 @@ class Node:
         # iterate over the next lines
         for x in lines[1:]:
             # add indentation to them
-            new_text += "       " + x + "\n"
+            new_text += "    " + x + "\n"
         # finally return the modified text
         return new_text
 
@@ -105,14 +105,13 @@ class Node:
             result = f'root [feature={self.feature}, threshold={self.threshold}] \n'
         else:
             result = f'-> node [feature={self.feature}, threshold={self.threshold}] \n'
-
         if self.left_child:
             left = self.left_child.__str__()
             result += self.left_child_add_prefix(left)
         if self.right_child:
             right = self.right_child.__str__()
             result += self.right_child_add_prefix(right)
-        return result
+        return result.rstrip() + '\n'
 
 
 class Leaf(Node):
