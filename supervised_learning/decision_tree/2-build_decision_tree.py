@@ -106,12 +106,12 @@ class Node:
         else:
             result = f'-> node [feature={self.feature}, threshold={self.threshold}] \n'
 
-        if self.right_child:
+        if self.left_child:
             left = self.left_child.__str__()
-            result += self.left_child.left_child_add_prefix(left)
+            result += self.left_child_add_prefix(left)
         if self.right_child:
             right = self.right_child.__str__()
-            result += self.right_child.right_child_add_prefix(right)
+            result += self.right_child_add_prefix(right)
         return result
 
 
