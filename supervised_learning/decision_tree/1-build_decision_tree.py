@@ -70,6 +70,7 @@ class Leaf(Node):
         return self.depth
 
     def count_nodes_below(self, only_leaves=False):
+        '''returns 1 when counting leaf'''
         return 1
 
 
@@ -95,4 +96,5 @@ class Decision_Tree():
         return self.root.max_depth_below()
 
     def count_nodes(self, only_leaves=False):
+        '''calls method of node to count nodes and leaves'''
         return self.root.count_nodes_below(only_leaves=only_leaves)
