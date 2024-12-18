@@ -123,7 +123,7 @@ class Node:
         if self.right_child:
             right = self.right_child.__str__()
             result += self.right_child_add_prefix(right)
-        return result
+        return result + "\n"
 
 class Leaf(Node):
     '''Class of leafs in a decision tree'''
