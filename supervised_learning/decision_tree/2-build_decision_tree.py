@@ -98,7 +98,7 @@ class Node:
             else:
                 new_text += "    " + x + "\n"
         # finally return the modified text
-        return new_text.rstrip()
+        return new_text
 
     def __str__(self):
         '''creates a visual representation of the nodes
@@ -116,7 +116,7 @@ class Node:
         if self.right_child:
             right = self.right_child.__str__()
             result += self.right_child_add_prefix(right)
-        return result.rstrip() + '\n'
+        return result
 
 class Leaf(Node):
     '''Class of leafs in a decision tree'''
