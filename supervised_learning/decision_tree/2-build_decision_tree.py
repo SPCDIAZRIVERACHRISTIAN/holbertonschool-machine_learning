@@ -77,53 +77,91 @@ class Node:
     #     # return modified text
     #     return new_text
 
-    def left_child_add_prefix(self,text):
-        lines=text.split("\n")
-        new_text="    +--"+lines[0]+"\n"
-        for x in lines[1:] :
-            new_text+=("    |  "+x)+"\n"
-        return (new_text)
+    # def right_child_add_prefix(self, text):
+    #     '''Adds prefix to left child
 
-    def right_child_add_prefix(self, text):
-        '''Adds prefix to left child
+    #     Args:
+    #         text (str):prefex
 
-        Args:
-            text (str):prefex
+    #     Returns:
+    #         str: left child prefex
+    #     '''
+    #     # this splits the inputs text into lines
+    #     lines = text.split("\n")
+    #     # add the prefix to the first line(line[0])
+    #     new_text = "    +--" + lines[0] + "\n"
+    #     # iterate over the next lines
+    #     for i, x in enumerate(lines[1:]):
+    #         if i == len(lines[1:]) - 1:
+    #             new_text += "   " + x
+    #         # add indentation to them
+    #         else:
+    #             new_text += "   " + x + "\n"
+    #     # finally return the modified text
+    #     return new_text
 
-        Returns:
-            str: left child prefex
-        '''
-        # this splits the inputs text into lines
+    # def __str__(self):
+    #     '''creates a visual representation of the nodes
+
+    #     Returns:
+    #         str: scheme for nodes
+    #     '''
+    #     if self.is_root:
+    #         result = f'root [feature={self.feature}, threshold={self.threshold}] \n'
+    #     else:
+    #         result = f'-> node [feature={self.feature}, threshold={self.threshold}] \n'
+    #     if self.left_child:
+    #         left = self.left_child.__str__()
+    #         result += self.left_child_add_prefix(left)
+    #     if self.right_child:
+    #         right = self.right_child.__str__()
+    #         result += self.right_child_add_prefix(right)
+    #     return result
+    def __str__(self):
+        """
+        Method that returns the string representation of the current node
+        """
+        # String representation for the current node
+        node_str = (
+            f"root [feature={self.feature}, threshold={self.threshold}]\n"
+            if self.is_root else
+            f"-> node [feature={self.feature}, "
+            f"threshold={self.threshold}]\n"
+        )
+
+        # If the node is a leaf, simply return the string representation
+        if self.is_leaf:
+            return node_str
+
+        # Formatting for the left and right children
+        left_str = self.left_child_add_prefix(
+            self.left_child.__str__()) if self.left_child else ""
+        right_str = self.right_child_add_prefix(
+            self.right_child.__str__()) if self.right_child else ""
+
+        return node_str + left_str + right_str
+
+    def left_child_add_prefix(self, text):
+        """ Add prefix to the left child """
         lines = text.split("\n")
-        # add the prefix to the first line(line[0])
+        # Adding prefix to the first line
         new_text = "    +--" + lines[0] + "\n"
-        # iterate over the next lines
-        for i, x in enumerate(lines[1:]):
-            if i == len(lines[1:]) - 1:
-                new_text += "   " + x
-            # add indentation to them
-            else:
-                new_text += "   " + x + "\n"
-        # finally return the modified text
+        # Adding prefix to the rest of the lines
+        new_text += "\n".join(["    |  " + line for line in lines[1:-1]])
+        # Append an additional newline character if there are multiple lines
+        new_text += "\n" if len(lines) > 1 else ""
         return new_text
 
-    def __str__(self):
-        '''creates a visual representation of the nodes
-
-        Returns:
-            str: scheme for nodes
-        '''
-        if self.is_root:
-            result = f'root [feature={self.feature}, threshold={self.threshold}] \n'
-        else:
-            result = f'-> node [feature={self.feature}, threshold={self.threshold}] \n'
-        if self.left_child:
-            left = self.left_child.__str__()
-            result += self.left_child_add_prefix(left)
-        if self.right_child:
-            right = self.right_child.__str__()
-            result += self.right_child_add_prefix(right)
-        return result + "\n"
+    def right_child_add_prefix(self, text):
+        """ Add prefix to the right child """
+        lines = text.split("\n")
+        # Adding prefix to the first line
+        new_text = "    +--" + lines[0] + "\n"
+        # Adding prefix to the rest of the lines
+        new_text += "\n".join(["     " + "  " + line for line in lines[1:-1]])
+        # Append an additional newline character if there are multiple lines
+        new_text += "\n" if len(lines) > 1 else ""
+        return new_text
 
 class Leaf(Node):
     '''Class of leafs in a decision tree'''
