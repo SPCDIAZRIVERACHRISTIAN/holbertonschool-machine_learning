@@ -96,7 +96,7 @@ class Node:
                 new_text += "    " + x
             # add indentation to them
             else:
-                new_text += "    " + x + "\n"
+                new_text += "\t" + x + "\n"
         # finally return the modified text
         return new_text
 
