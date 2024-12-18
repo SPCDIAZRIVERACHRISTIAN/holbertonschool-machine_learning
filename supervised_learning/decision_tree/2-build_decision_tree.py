@@ -67,13 +67,15 @@ class Node:
         # split the input text into lines
         lines = text.split("\n")
         # add a prefix to the first line(line[0])
-        new_text = "    +--"+lines[0]+"\n"
+        new_text = "    +--"+ lines[0] + "\n"
         # iterate over the lines after the first
-        for x in lines[1:]:
+        for i, x in enumerate(lines[1:]):
+            if i == len(lines[1:]) - 1:
+                continue
             # add indentation and | to give continuation
-            new_text += ("    |  "+x)+"\n"
+            new_text += "    |  "+ x + "\n"
         # return modified text
-        return (new_text)
+        return new_text
 
     def right_child_add_prefix(self, text):
         '''Adds prefix to left child
@@ -89,11 +91,14 @@ class Node:
         # add the prefix to the first line(line[0])
         new_text = "    +--" + lines[0] + "\n"
         # iterate over the next lines
-        for x in lines[1:]:
+        for i, x in enumerate(lines[1:]):
+            if i == len(lines[1:]) - 1:
+                new_text += "    " + x
             # add indentation to them
-            new_text += "    " + x + "\n"
+            else:
+                new_text += "    " + x + "\n"
         # finally return the modified text
-        return new_text
+        return new_text.rstrip()
 
     def __str__(self):
         '''creates a visual representation of the nodes
@@ -112,7 +117,6 @@ class Node:
             right = self.right_child.__str__()
             result += self.right_child_add_prefix(right)
         return result.rstrip() + '\n'
-
 
 class Leaf(Node):
     '''Class of leafs in a decision tree'''
