@@ -102,11 +102,9 @@ class Node:
             str: scheme for nodes
         '''
         if self.is_root:
-            result = f'root [feature={self.feature}, \
-               threshold={self.threshold}] \n'
+            result = f'root [feature={self.feature}, threshold={self.threshold}] \n'
         else:
-            result = f'-> node [feature={self.feature}, \
-                threshold={self.threshold}] \n'
+            result = f'-> node [feature={self.feature}, threshold={self.threshold}] \n'
 
         if self.right_child:
             left = self.left_child.__str__()
