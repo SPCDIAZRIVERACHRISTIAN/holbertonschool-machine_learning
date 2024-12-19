@@ -67,13 +67,13 @@ class Node:
         # split the input text into lines
         lines = text.split("\n")
         # add a prefix to the first line(line[0])
-        new_text = "    +--"+ lines[0] + "\n"
+        new_text="    +--"+lines[0]+"\n"
         # iterate over the lines after the first
         for i, x in enumerate(lines[1:]):
             if i == len(lines[1:]) - 1:
                 continue
             # add indentation and | to give continuation
-            new_text += "    |  "+ x + "\n"
+            new_text += ("    |  ")+ x + "\n"
         # return modified text
         return new_text
 
@@ -89,14 +89,14 @@ class Node:
         # this splits the inputs text into lines
         lines = text.split("\n")
         # add the prefix to the first line(line[0])
-        new_text = "    +--" + lines[0] + "\n"
+        new_text="    +--"+lines[0]+"\n"
         # iterate over the next lines
         for i, x in enumerate(lines[1:]):
             if i == len(lines[1:]) - 1:
                 new_text += "   " + x
             # add indentation to them
             else:
-                new_text += "   " + x + "\n"
+                new_text += "       " + x + "\n"
         # finally return the modified text
         return new_text
 
@@ -107,9 +107,9 @@ class Node:
             str: scheme for nodes
         '''
         if self.is_root:
-            result = f'root [feature={self.feature}, threshold={self.threshold}] \n'
+            result = f'root [feature={self.feature}, threshold={self.threshold}]\n'
         else:
-            result = f'-> node [feature={self.feature}, threshold={self.threshold}] \n'
+            result = f'-> node [feature={self.feature}, threshold={self.threshold}]\n'
         if self.left_child:
             left = self.left_child.__str__()
             result += self.left_child_add_prefix(left)
