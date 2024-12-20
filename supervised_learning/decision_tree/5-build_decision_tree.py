@@ -171,6 +171,48 @@ class Node:
             if child is not None:
                 child.update_bounds_below()
 
+    def update_indicator(self):
+        '''This function computes the indicator function
+            from the node.lower and upper dictionaries and
+            stores it in a attribute
+        '''
+
+        def is_large_enough(x):
+            '''computes if the lower bounds of a leaf are
+                large enough.
+
+            Args:
+                x (dict): values of bounds
+            '''
+            # creates a numpy array with the values of x
+            # uses list comprehension to get every element in x
+            # if i isn't found on the dictionary it assigns an -inf value
+            low_bounds = np.array([self.lower.get(
+                i, -np.inf) for i in range(x.shape[1])])
+            # verifies if x greater or equal than the bounds in the columns
+            return np.all(x >= low_bounds, axis=1)
+
+        def is_small_enough(x):
+            '''computes if the lower bounds of a leaf are
+                small enough.
+
+            Args:
+                x (dict): values of bounds
+
+            Returns:
+                bool: true if bounds are small enough
+            '''
+            # creates a numpy array with the values of x
+            # uses list comprehension to get every element in x
+            # if i isn't found on the dictionary it assigns an -inf value
+            high_bounds = np.array([self.upper.get(
+                i, np.inf) for i in range(x.shape[1])])
+            # verifies if x less or equal than the bounds in the columns
+            return np.all(x <= high_bounds, axis=1)
+        # assigns in list form the booleans found for each bound
+        self.indicator = lambda x: np.all(np.array(
+            [is_large_enough(x), is_small_enough(x)]), axis=0)
+
 
 class Leaf(Node):
     '''Class of leafs in a decision tree'''
