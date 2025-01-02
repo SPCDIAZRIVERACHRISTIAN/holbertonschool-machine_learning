@@ -70,9 +70,9 @@ class NeuralNetwork:
 
     def forward_prop(self, X):
         # compute the hidden layer
-        z1 = np.dot(self.__W1, X) + self.__b1
+        z1 = np.matmul(self.__W1, X) + self.__b1
         # compute the output layer
-        z2 = np.dot(self.__W2, self.__A1) + self.__b2
+        z2 = np.matmul(self.__W2, self.__A1) + self.__b2
         # apply sigmoid function
         self.__A1 = 1 / (1 + np.exp(-z1))
         self.__A2 = 1 / (1 + np.exp(-z2))
