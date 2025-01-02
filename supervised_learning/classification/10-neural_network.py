@@ -72,7 +72,8 @@ class NeuralNetwork:
         '''calculates forward propagation
 
         Args:
-            X (ndarray): numpy.ndarray with shape (nx, m) that contains the input data
+            X (ndarray): numpy.ndarray with shape
+                (nx, m) that contains the input data
 
         Returns:
             ndarray: return activity output of hidden and output layer
@@ -84,4 +85,3 @@ class NeuralNetwork:
         Z2 = np.matmul(self.W2, self.A1) + self.b2
         self.__A2 = 1 / (1 + np.exp(-Z2))
         return self.__A1, self.__A2
-
