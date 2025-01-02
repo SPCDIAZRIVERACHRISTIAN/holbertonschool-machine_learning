@@ -5,7 +5,7 @@
 import numpy as np
 
 
-class Neuron:
+class NeuralNetwork:
     '''This class is to create neurons'''
     def __init__(self, nx, nodes):
         '''initialize the neural network
@@ -37,4 +37,4 @@ class Neuron:
         self.b2 = 0
         # initialize activated output at 0
         self.A1 = 0
-        self.A2
+        self.A2 = 0
