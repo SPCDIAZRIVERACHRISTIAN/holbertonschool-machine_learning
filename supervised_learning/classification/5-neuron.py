@@ -123,11 +123,14 @@ class Neuron:
             __b updated bias
         '''
 
-        m = X.shape[1]
-
+        # get numberof examples in X
+        m = Y.shape[1]
+        # Calculate the gradient
         dz = A - Y
+        # Derivative of the weight
         dw = np.matmul(X, dz.T) / m
+        # Derivative of the bias
         db = np.sum(dz) / m
-
-        self.__W = self.__W - alpha * dw
+        # set the new weights and bias
+        self.__W = self.__W - alpha * dw.T
         self.__b = self.__b - alpha * db
