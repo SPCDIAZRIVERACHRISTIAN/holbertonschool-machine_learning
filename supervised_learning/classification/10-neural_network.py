@@ -69,12 +69,19 @@ class NeuralNetwork:
         return self.__A2
 
     def forward_prop(self, X):
-        # compute the hidden layer
-        z1 = np.matmul(self.__W1, X) + self.__b1
-        # compute the output layer
-        z2 = np.matmul(self.__W2, self.__A1) + self.__b2
-        # apply sigmoid function
-        self.__A1 = 1 / (1 + np.exp(-z1))
-        self.__A2 = 1 / (1 + np.exp(-z2))
+        '''calculates forward propagation
 
+        Args:
+            X (ndarray): numpy.ndarray with shape (nx, m) that contains the input data
+
+        Returns:
+            ndarray: return activity output of hidden and output layer
+        '''
+        # compute the hidden layer
+        Z1 = np.matmul(self.W1, X) + self.b1
+        self.__A1 = 1 / (1 + np.exp(-Z1))
+        # Calculate the output neuron
+        Z2 = np.matmul(self.W2, self.A1) + self.b2
+        self.__A2 = 1 / (1 + np.exp(-Z2))
         return self.__A1, self.__A2
+
