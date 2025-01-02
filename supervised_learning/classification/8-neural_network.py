@@ -31,9 +31,9 @@ class NeuralNetwork:
         # use np.random to initialize weight
         # with nodes as row and nx as columns
         self.W1 = np.random.randn(nodes, nx)
-        self.W2 = np.random.randn(nodes, nx)
+        self.W2 = np.random.randn(1, nodes)
         # initialize bias at 0
-        self.b1 = 0
+        self.b1 = np.zeros((nodes, 1))
         self.b2 = 0
         # initialize activated output at 0
         self.A1 = 0
