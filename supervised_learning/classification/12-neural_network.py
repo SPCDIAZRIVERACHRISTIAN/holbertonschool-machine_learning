@@ -128,9 +128,9 @@ class NeuralNetwork:
         # to be used in the prediciton
         _, A2 = self.forward_prop(X)
         # the prediction consist on using numpy's
-        # where function that looks for the elements
+        # where function that looks the elements
         # in ndarray given to the function and organizes
-        # it in 0 and 1 where 1 will be for every
+        # it in 0 and 1 where 1 will be every
         # element that is greater or equal than 0.5
         # and 0 where it's not
         pred = np.where(A2 >= 0.5, 1, 0)
