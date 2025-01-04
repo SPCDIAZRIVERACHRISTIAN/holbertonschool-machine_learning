@@ -114,9 +114,9 @@ class Neuron:
         Args:
             X (ndarray): numpy.ndarray with shape (nx, m)
                 that contains the input data
-            Y (_type_): numpy.ndarray with shape (1, m)
+            Y (ndarray): numpy.ndarray with shape (1, m)
                 that contains the correct labels for the input data
-            A (_type_): numpy.ndarray with shape (1, m)
+            A (ndarray): numpy.ndarray with shape (1, m)
                 containing the activated output of the neuron for each example
             alpha (float, optional): learning rate. Defaults to 0.05.
 
@@ -125,7 +125,7 @@ class Neuron:
             __b updated bias
         '''
 
-        # get numberof examples in X
+        # get number of examples in X
         m = Y.shape[1]
         # Calculate the gradient
         dz = A - Y
