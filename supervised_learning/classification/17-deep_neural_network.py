@@ -54,3 +54,18 @@ class DeepNeuralNetwork:
             # store the biase f0r every weight to
             # be a ndarray of 0
             self.__weights['b' + str(k + 1)] = np.zeros((layers[k], 1))
+
+    @property
+    def L(self):
+        """ This method retrieves the number of layers"""
+        return self.__L
+
+    @property
+    def cache(self):
+        """ This method retrieves the intermediary values"""
+        return self.__cache
+
+    @property
+    def weights(self):
+        """ This method retrieves the weights and biases"""
+        return self.__weights
