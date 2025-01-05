@@ -37,7 +37,7 @@ class DeepNeuralNetwork:
 
         # iterate over layers to add weights and biases to dictionary
         for k in range(self.L):
-            # for the initial number in layers
+            # f0r the initial number in layers
             # the first layer is the number of nodes in the first layer
             # we need to store it differently because the
             # dimensions of the weight
@@ -51,6 +51,6 @@ class DeepNeuralNetwork:
                 # use he et al. method to initialize the weight
                 self.weights['W' + str(k + 1)] = np.random.randn(
                     layers[k], layers[k - 1]) * np.sqrt(2 / layers[k - 1])
-            # store the biase for every weight to
+            # store the biase f0r every weight to
             # be a ndarray of 0
             self.weights['b' + str(k + 1)] = np.zeros((layers[k], 1))
