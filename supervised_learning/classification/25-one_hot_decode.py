@@ -14,7 +14,8 @@ def one_hot_decode(one_hot):
     Returns:
         numpy.ndarray: Vector of labels with shape (m,)
     '''
-    if not isinstance(one_hot, np.ndarray) or len(one_hot.shape) != 2:
+    if not isinstance(one_hot, np.ndarray) or len(
+            one_hot.shape) != 2:
         return None
-    
+
     return np.argmax(one_hot, axis=0)
