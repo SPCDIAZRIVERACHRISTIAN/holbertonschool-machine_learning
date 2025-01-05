@@ -69,3 +69,35 @@ class DeepNeuralNetwork:
     def weights(self):
         """ This method retrieves the weights and biases"""
         return self.__weights
+
+    def forward_prop(self, X):
+        '''calculates the forward propagation
+
+        Args:
+            X (ndarray): with shape (nx, m) that
+                contains the input data nx=number of features
+                m=number of examples
+
+        Returns:
+            ndarray: returns cache and output of the neural network
+        '''
+        # store X in cache dictionary
+        self.__cache['A0'] = X
+        # initialize activity output with X
+        # to start forward propagation
+        A = X
+        # iterate through layers starting in the second
+        # hidden layer node
+        for k in range(1, self.__L + 1):
+            # add the weight of each node
+            W = self.__weights['W' + str(k)]
+            # add the biases
+            b = self.__weights['b' + str(k)]
+            # use matmul to calculate the output neuron
+            z = np.matmul(W, A) + b
+            # calculate the sigmoid function on every layer
+            A = 1 / (1 + np.exp(-z))
+            # store output of each layer in cache
+            self.__cache['A' + str(k)] = A
+        # return the output and cache
+        return A, self.__cache
