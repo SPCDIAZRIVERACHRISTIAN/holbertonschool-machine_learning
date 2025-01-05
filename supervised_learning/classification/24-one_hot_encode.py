@@ -18,6 +18,8 @@ def one_hot_encode(Y, classes):
         return None
     if not isinstance(classes, int) or classes < 2:
         return None
+    if np.max(Y) >= classes:
+        return None
 
     one_hot = np.zeros((classes, Y.shape[0]))
     one_hot[Y, np.arange(Y.shape[0])] = 1
