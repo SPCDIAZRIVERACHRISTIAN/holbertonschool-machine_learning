@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''This is a function that returns two placeholders'''
 
-import tensorflow.compat.v1 as tf # type: ignore
+import tensorflow.compat.v1 as tf  # type: ignore
 tf.disable_eager_execution()
 
 
