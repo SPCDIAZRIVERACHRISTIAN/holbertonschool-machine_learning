@@ -2,6 +2,7 @@
 '''This function evaluates the output of a neural network'''
 
 import tensorflow.compat.v1 as tf  # type:ignore
+tf.disable_v2_behavior()
 
 
 def evaluate(X, Y, save_path):
