@@ -16,13 +16,13 @@ def evaluate(X, Y, save_path):
     Returns:
         tuple: (prediction, accuracy, loss)
     '''
+    saver = tf.train.import_meta_graph(f"{save_path}.meta")
     with tf.Session() as sesh:
-        saver = tf.train.import_meta_graph(save_path + ".meta")
         saver.restore(sesh, save_path)
 
-        x = tf.get_collection("X")[0]
-        y = tf.get_collection("Y")[0]
-        y_pred = tf.get_collection("Y_pred")[0]
+        x = tf.get_collection("x")[0]
+        y = tf.get_collection("y")[0]
+        y_pred = tf.get_collection("y_pred")[0]
         loss = tf.get_collection("loss")[0]
         accuracy = tf.get_collection("accuracy")[0]
 
