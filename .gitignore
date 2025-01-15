@@ -8,3 +8,5 @@ pca.npz
 practice/
 data/
 test*
+model*
+checkpoint*
