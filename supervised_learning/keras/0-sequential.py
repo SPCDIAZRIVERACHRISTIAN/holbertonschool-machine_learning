@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+'''This is a function :)'''
 
 import tensorflow.keras as K  # type:ignore
 
@@ -15,7 +16,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
         keep_prob (float): probability that a node will be kept for dropout
     '''
 
-    assert(len(layers) == len(activations))
+    assert (len(layers) == len(activations))
 
     model = K.models.Sequential()
 
