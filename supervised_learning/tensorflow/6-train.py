@@ -42,8 +42,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes,
 
     init = tf.global_variables_initializer()
 
-    saver = tf.train.Saver()
-
     tf.add_to_collection("X", x)
     tf.add_to_collection("Y", y)
     tf.add_to_collection("Y_pred", y_pred)
@@ -51,19 +49,26 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes,
     tf.add_to_collection("accuracy", accuracy)
     tf.add_to_collection("train_op", train_op)
 
+    saver = tf.train.Saver()
+
     with tf.Session() as sess:
         sess.run(init)
+
         for i in range(iterations + 1):
-            sess.run(train_op, feed_dict={x: X_train, y: Y_train})
-            if i % 100 == 0 or i == 0 or i == iterations:
-                train_loss, train_accuracy = sess.\
+            train_loss, train_accuracy = sess.\
                     run([loss, accuracy], feed_dict={x: X_train, y: Y_train})
-                valid_loss, valid_accuracy = sess.\
-                    run([loss, accuracy], feed_dict={x: X_valid, y: Y_valid})
+
+            valid_loss, valid_accuracy = sess.\
+                run([loss, accuracy], feed_dict={x: X_valid, y: Y_valid})
+
+            if i % 100 == 0 or i == 0 or i == iterations:
                 print(f"After {i} iterations:")
                 print(f"\tTraining Cost: {train_loss}")
                 print(f"\tTraining Accuracy: {train_accuracy}")
                 print(f"\tValidation Cost: {valid_loss}")
                 print(f"\tValidation Accuracy: {valid_accuracy}")
+
+            if i < iterations:
+                sess.run(train_op, feed_dict={x: X_train, y: Y_train})
         save_path = saver.save(sess, save_path)
     return save_path
