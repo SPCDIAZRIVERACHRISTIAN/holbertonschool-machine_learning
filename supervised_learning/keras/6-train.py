@@ -37,7 +37,11 @@ def train_model(network,
             successive epochs, as well as validation loss values and validation
             metrics values (if applicable).
     '''
-    early_stopping = K.callbacks.EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True)
+    early_stopping = K.callbacks.EarlyStopping(
+        monitor='val_loss',
+        patience=patience,
+        restore_best_weights=True
+        )
     history = network.fit(data,
                           labels,
                           batch_size=batch_size,
