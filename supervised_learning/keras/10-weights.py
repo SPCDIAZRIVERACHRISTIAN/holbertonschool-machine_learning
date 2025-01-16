@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 '''This functions saves a model wights and loads the weihgts'''
 
+import tensorflow.keras as K  # type: ignore
+
 
 def save_weights(network, filename, save_format='keras'):
     '''Saves a model's weights
