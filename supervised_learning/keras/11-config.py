@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 '''This functions save and load configuration in json'''
 
+import json
+
 
 def save_config(network, filename):
     '''saves a model’s configuration in JSON format
@@ -24,4 +26,4 @@ def load_config(filename):
     '''
     with open(filename, 'r') as json_file:
         json_config = json_file.read()
-    return K.models.model_from_json(json_config)
+    return json.loads(json_config)
