@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 '''This function tests the model'''
 
-import tensorflow.keras as K  # type: ignore
-
 
 def test_model(network, data, labels, verbose=True):
     '''test models
