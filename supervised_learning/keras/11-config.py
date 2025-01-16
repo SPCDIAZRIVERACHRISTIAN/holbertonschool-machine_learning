@@ -1,29 +1,39 @@
 #!/usr/bin/env python3
-'''This functions save and load configuration in json'''
-
-import json
+"""This module saves and loads the configuration
+of a model using Keras"""
+import tensorflow.keras as K
 
 
 def save_config(network, filename):
-    '''saves a model’s configuration in JSON format
+    """
+    Save a model's configuration in JSON format.
 
-    Args:
-        network: is the model whose configuration should be saved
-        filename: is the path of the file that
-            the configuration should be saved to
-    '''
-    json_config = network.to_json()
-    with open(filename, 'w') as json_file:
-        json_file.write(json_config)
+    Parameters:
+    network (keras model): The model whose
+    configuration should be saved.
+    filename (str): The path of the file that
+    the configuration should be saved to.
+
+    Returns:
+    None
+    """
+    model_json = network.to_json()
+    with open(filename, "w") as json_file:
+        json_file.write(model_json)
 
 
 def load_config(filename):
-    '''loads a model with a specific configuration
+    """
+    Load a model with a specific configuration.
 
-    Args:
-        filename: is the path of the file containing the
-            model’s configuration in JSON format
-    '''
+    Parameters:
+    filename (str): The path of the file containing
+    the model configuration in JSON format.
+
+    Returns:
+    The loaded model.
+    """
     with open(filename, 'r') as json_file:
-        json_config = json_file.read()
-    return json.loads(json_config)
+        loaded_model_json = json_file.read()
+    loaded_model = K.models.model_from_json(loaded_model_json)
+    return loaded_model
