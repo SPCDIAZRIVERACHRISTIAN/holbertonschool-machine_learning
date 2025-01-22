@@ -24,4 +24,5 @@ def create_momentum_op(alpha, beta1):
     Returns:
     tf.keras.optimizers.SGD: The SGD optimizer object with momentum.
     '''
-    return tf.keras.optimizers.SGD(learning_rate=alpha, momentum=beta1)
+    optimizer = tf.keras.optimizers.SGD(learning_rate=alpha, momentum=beta1)
+    return optimizer
