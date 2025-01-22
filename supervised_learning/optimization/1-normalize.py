@@ -4,7 +4,7 @@ NOTES:
 normalization formula
 normie x = (matrix - mean) / standard deviation
 '''
-import numpy as np
+# import numpy as np
 
 
 def normalize(X, m, s):
