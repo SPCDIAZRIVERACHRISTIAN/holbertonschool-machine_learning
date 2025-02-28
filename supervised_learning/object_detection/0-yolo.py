@@ -5,7 +5,7 @@
     detection
 '''
 
-import tensorflow.keras as K #type: ignore
+import tensorflow.keras as K  # type: ignore
 
 
 class Yolo:
