@@ -9,3 +9,5 @@ practice/
 test*
 model*
 checkpoint*
+yolo.h5
+yolo/
