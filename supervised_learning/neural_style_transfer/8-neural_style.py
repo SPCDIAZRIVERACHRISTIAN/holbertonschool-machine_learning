@@ -75,26 +75,32 @@ class NST:
         return image
 
     def load_model(self):
-        """function that instantiates a VGG19 model from Keras"""
+        """Instantiates a VGG19 model from Keras with AvgPooling2D instead of MaxPooling2D."""
 
-        base_vgg = tf.keras.applications.VGG19(include_top=False,
-                                               weights='imagenet',
-                                               input_tensor=None,
-                                               input_shape=None,
-                                               pooling=None,
-                                               classes=1000)
-        custom_object = {'MaxPooling2D': tf.keras.layers.AveragePooling2D}
-        base_vgg.save('base_vgg')
-        vgg = tf.keras.models.load_model('base_vgg',
-                                         custom_objects=custom_object)
-        for layer in vgg.layers:
+        base_vgg = tf.keras.applications.VGG19(include_top=False, weights='imagenet')
+
+        # Replace every MaxPool with AveragePool in-memory
+        x = base_vgg.input
+        for layer in base_vgg.layers[1:]:  # skip the InputLayer
+            if isinstance(layer, tf.keras.layers.MaxPooling2D):
+                x = tf.keras.layers.AveragePooling2D(pool_size=layer.pool_size,
+                                              strides=layer.strides,
+                                              padding=layer.padding)(x)
+            else:
+                x = layer(x)
+
+        # Freeze all layers
+        for layer in base_vgg.layers:
             layer.trainable = False
 
-        style_outputs = [vgg.get_layer(name).output
-                         for name in self.style_layers]
-        content_output = vgg.get_layer(self.content_layer).output
+        # Collect the outputs of the style layers + the content layer
+        style_outputs = [base_vgg.get_layer(name).output for name in self.style_layers]
+        content_output = base_vgg.get_layer(self.content_layer).output
         outputs = style_outputs + [content_output]
-        self.model = tf.keras.models.Model(inputs=vgg.input, outputs=outputs)
+
+        # Build the new model entirely in memory (no saving/loading)
+        self.model = tf.keras.models.Model(inputs=base_vgg.input, outputs=outputs)
+
 
     @staticmethod
     def gram_matrix(input_layer):
