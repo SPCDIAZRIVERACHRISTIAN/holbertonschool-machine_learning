@@ -78,7 +78,7 @@ class NST:
 
     def load_model(self):
         """Loads the model for Neural Style Transfer"""
-        # Initialize VGG19 as the base model, excluding the
+        # Initialize VGG19 -- the base model, excluding the
         # top layer (classifier)
         # The model uses the default input size of 224x224 pixels
         base_vgg = tf.keras.applications.VGG19(
@@ -108,11 +108,11 @@ class NST:
         for layer in vgg.layers:
             layer.trainable = False
 
-        # Gather outputs from layers specified for capturing style
+        # Gather outputs frm layers specified for capturing style
         # These layers are predefined and crucial for extracting style features
         style_outputs = \
             [vgg.get_layer(name).output for name in self.style_layers]
-        # Similarly, capture the output from the designated content layer
+        # Similarly, capture the output frm the designated content layer
         # This layer is pivotal for content feature extraction
         content_output = vgg.get_layer(self.content_layer).output
         # Merge style and content layer outputs for comprehensive
@@ -176,7 +176,7 @@ class NST:
         Neural Style Transfer cost
         Sets the public instance attributes:
             gram_style_features - a list of gram matrices
-                calculated from the style layer outputs
+                calculated frm the style layer outputs
             content_feature - the content later output
                 of the content image
         """
@@ -188,7 +188,7 @@ class NST:
             self.content_image * 255)
 
         # Extract the style and content features
-        # from the respective image
+        # frm the respective image
         style_outputs = self.model(style_image)
         content_output = self.model(content_image)
 
@@ -212,7 +212,7 @@ class NST:
         Returns:
             tf.Tensor -- the layer style cost
         """
-        # Extract the number of channels from the ]
+        # Extract the number of channels frm the ]
         # last dimension of style_output
         c = style_output.shape[-1]
 
@@ -249,7 +249,153 @@ class NST:
         # and the target gram matrix (gram_target). This
         # error represents the style cost,
         # quantifying how much the style of the generated
-        # image deviates from the target style
+        # image deviates frm the target style
         style_cost = tf.reduce_mean(tf.square(gram_style - gram_target))
 
         return style_cost
+
+    def style_cost(self, style_outputs):
+        """Calculates the style cost for generated image
+        Arguments:
+            style_outputs {list} -- a list of tf.Tensor
+            containing the style outputs for the generated image
+        Returns:
+            tf.Tensor -- the style cost
+        """
+        # Validate that style_outputs is a list and its length
+        # matches the number of style layers
+        # This ensures that there is a one-to-one correspondence
+        # between the layers specified
+        # for style representation and the actual outputs frm
+        # the style image
+        st_len = len(self.style_layers)
+        err_list_check = \
+            "style_outputs must be a list with a length of {}".format(st_len)
+        if not isinstance(style_outputs, list):
+            raise TypeError(err_list_check)
+        if len(self.style_layers) != len(style_outputs):
+            raise TypeError(err_list_check)
+
+        # Reminders:
+        # style_layers is a list of name strings indicating
+        # which layers of the network
+        # are used to compute the style representation
+        # style_outputs is a list of tensors containing the
+        # activations of the style layers
+        # for the generated image
+
+        # Initialize a list to hold the style costs for each layer
+        style_costs = []
+        # Each layer's style cost is weighted evenly, with all weights
+        # summing to 1.
+        # This ensures that no single layer disproportionately ]
+        # influences the total style cost.
+        weight = 1 / len(self.style_layers)
+
+        # Calculate the weighted style cost for each layer
+        for style_output, gram_target in zip(style_outputs,
+                                             self.gram_style_features):
+            # Compute the style cost for the current layer
+            layer_style_cost = self.layer_style_cost(style_output, gram_target)
+            # Apply the weight to the layer's style cost
+            weighted_layer_style_cost = weight * layer_style_cost
+            # Add the weighted style cost to the list of style costs
+            style_costs.append(weighted_layer_style_cost)
+
+        # Sum all the weighted style costs to get the total style cost
+        # tf.add_n is used to sum a list of tensors, producing a single tensor
+        style_cost = tf.add_n(style_costs)
+
+        return style_cost
+
+    def content_cost(self, content_output):
+        """Calculates the content cost for the generated image
+        Arguments:
+            content_output {tf.Tensor} -- the content output
+            for the generated image
+        Returns:
+            tf.Tensor -- the content cost
+        """
+        # Reminder:
+        # The content layer output of the content_image is
+        # stored in self.content_feature.
+        # This tensor captures the high-level content
+        # details of the content image.
+
+        # Ensure content_output matches the expected 4D shape
+        # of self.content_feature.
+        # If content_output is 3D (height, width, channels),
+        # add a batch dimension at the start.
+        if content_output.ndim == 3:
+            # Add batch dimension
+            content_output = content_output[tf.newaxis, ...]
+
+        # Validate that content_output has the same shape --
+        # self.content_feature.
+        # This ensures that the comparison between the generated
+        # image and the content image
+        # is valid and meaningful.
+        cn_fe = self.content_feature.shape
+        err_shape_check = \
+            "content_output must be a tensor of shape {}".format(cn_fe)
+        if not isinstance(content_output, (tf.Tensor, tf.Variable)):
+            raise TypeError(err_shape_check)
+        if content_output.shape != self.content_feature.shape:
+            raise TypeError(err_shape_check)
+        if content_output.shape[-1] != 512:
+            raise TypeError(err_shape_check)
+
+        # Compute the content cost -- the mean squared error
+        # between content_output
+        # and self.content_feature. This cost function encourages
+        # the generated image
+        # to have similar content features to the content image,
+        # effectively transferring
+        # the content of the content image to the generated image
+        # while retaining the style
+        # of the style image.1
+        content_cost = tf.reduce_mean(
+            tf.square(content_output - self.content_feature))
+
+        return content_cost
+
+    def total_cost(self, generated_image):
+        """Calculates the total cost for the generated image
+        Arguments:
+            generated_image {tf.Tensor} -- the generated image
+        Returns:
+            tuple -- (J, J_content, J_style)
+                J - the total cost
+                J_content - the content cost
+                J_style - the style cost
+        """
+        # Validate the input image's type and shape
+        validation_error = \
+            "generated_image must be a tensor of shape {}".format(
+                self.content_image.shape)
+        if not isinstance(generated_image, (tf.Tensor, tf.Variable)):
+            raise TypeError(validation_error)
+        if generated_image.shape != self.content_image.shape:
+            raise TypeError(validation_error)
+
+        # Preprocess the input image for the neural network
+        # Adjust pixel values to the expected range for VGG19
+        generated_image = tf.keras.applications.vgg19.preprocess_input(
+            generated_image * 255)
+        # Obtain both style and content features frm the model
+        model_outputs = self.model(generated_image)
+        # Separate style features frm the model outputs
+        style_features = model_outputs[:-1]
+        # Separate content feature frm the model outputs
+        content_feature = model_outputs[-1]
+
+        # Compute the style loss using the extracted style features
+        style_loss = self.style_cost(style_features)
+        # Compute the content loss using the extracted content feature
+        content_loss = self.content_cost(content_feature)
+
+        # Calculate the total loss as a weighted sum
+        # of content and style losses
+        total_loss = (self.alpha * content_loss + self.beta * style_loss)
+
+        return (total_loss, content_loss, style_loss)
