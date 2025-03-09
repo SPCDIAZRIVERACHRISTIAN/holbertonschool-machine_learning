@@ -321,27 +321,36 @@ class NST:
         return (total_cost, content_cost, style_cost)
 
     def compute_grads(self, generated_image):
-        """function that computes the gradients for the generated image"""
+        """
+        Calculates the gradients for the tf.Tensor generated image of shape (1, nh, nw, 3)
 
-        err = "generated_image must be a tensor of shape {}".format(
-            self.content_image.shape)
-        if not isinstance(generated_image, (tf.Tensor, tf.Variable)):
-            raise TypeError(err)
-        if generated_image.shape != self.content_image.shape:
-            raise TypeError(err)
+        generated_image: is a tf.Tensor or tf.Variable containing the generated image
 
-        # Note: in the main file, generated_images is defined as
-        # a tf.Variable to contain the image to optimize. It is initialized
-        # with self.content_image (the tf.Variable must be the same shape
-        # as the content image)
+        Returns: gradients, J_total, J_content, J_style
+        - gradients is a tf.Tensor containing the gradients for the generated image
+        - J_total is the total cost for the generated image
+        - J_content is the content cost for the generated image
+        - J_style is the style cost for the generated image
+        """
+        # 1. Validate input
+        if not isinstance(generated_image, (tf.Tensor, tf.Variable)) \
+           or generated_image.shape != self.content_image.shape:
+            raise TypeError(
+                f"generated_image must be a tensor of shape {self.content_image.shape}"
+            )
 
-        # Use tf.GradientTape to update the generated_image (float image)
+        # 2. Use GradientTape to record operations on generated_image
         with tf.GradientTape() as tape:
-            # Calculate the loss in a call to total_cost()
-            loss = self.total_cost(generated_image)
-            total_cost, content_cost, style_cost = loss
+            # Make sure tape is watching generated_image
+            tape.watch(generated_image)
 
-        # Infer the gradients passing in the loss and the generated_image
-        gradients = tape.gradient(total_cost, generated_image)
+            # 3. Compute total, content, and style costs together
+            J_total, J_content, J_style = self.total_cost(generated_image)
 
-        return (gradients, total_cost, content_cost, style_cost)
+        # 4. Compute gradients of total cost wrt generated_image
+        gradients = tape.gradient(J_total, generated_image)
+
+        # 5. Return the values
+        return gradients, J_total, J_content, J_style
+
+
