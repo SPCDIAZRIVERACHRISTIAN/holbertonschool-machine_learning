@@ -112,6 +112,11 @@ class NST():
             classifier_activation="softmax",
         )
 
+        for layer in base_vgg.layers:
+            if isinstance(layer, tf.keras.layers.MaxPooling2D):
+                layer._name = layer.name.replace('pool', 'avg_pool')
+                layer.__class__ = tf.keras.layers.AveragePooling2D
+
         outputs = [
             base_vgg.get_layer(name).output for name in self.style_layers]
         outputs.append(base_vgg.get_layer(self.content_layer).output)
