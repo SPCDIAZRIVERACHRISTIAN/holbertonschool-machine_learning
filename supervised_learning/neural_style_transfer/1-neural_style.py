@@ -122,3 +122,6 @@ class NST():
         outputs.append(base_vgg.get_layer(self.content_layer).output)
 
         self.model = tf.keras.Model(inputs=base_vgg.input, outputs=outputs)
+
+        for layer in self.model.layers:
+            layer.trainable = False
