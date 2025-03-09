@@ -95,5 +95,6 @@ class NST():
             )
         image = tf.expand_dims(image, axis=0)
         image = image / 255.0
+        image = tf.clip_by_value(image, 0.0, 1.0)
 
         return image
