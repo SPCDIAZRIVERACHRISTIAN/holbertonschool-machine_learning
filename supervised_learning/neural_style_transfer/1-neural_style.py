@@ -101,7 +101,10 @@ class NST():
         return image
 
     def load_model(self):
-        '''creates the ode lused to calculate the cost'''
+        """Loads the model for Neural Style Transfer"""
+        # Initialize VGG19 as the base model, excluding the
+        # top layer (classifier)
+        # The model uses the default input size of 224x224 pixels
         base_vgg = tf.keras.applications.VGG19(
             include_top=False,
             weights="imagenet",
@@ -109,19 +112,22 @@ class NST():
             input_shape=None,
             pooling=None,
             classes=1000,
-            classifier_activation="softmax",
         )
 
-        for layer in base_vgg.layers:
-            if isinstance(layer, tf.keras.layers.MaxPooling2D):
-                layer._name = layer.name.replace('pool', 'avg_pool')
-                layer.__class__ = tf.keras.layers.AveragePooling2D
+        custom_object = {"MaxPooling2D": tf.keras.layers.AveragePooling2D}
+        base_vgg.save("base_vgg")
 
-        outputs = [
-            base_vgg.get_layer(name).output for name in self.style_layers]
-        outputs.append(base_vgg.get_layer(self.content_layer).output)
+        vgg = tf.keras.models.load_model("base_vgg",
+                                         custom_objects=custom_object)
 
-        self.model = tf.keras.Model(inputs=base_vgg.input, outputs=outputs)
-
-        for layer in self.model.layers:
+        for layer in vgg.layers:
             layer.trainable = False
+
+        style_outputs = \
+            [vgg.get_layer(name).output for name in self.style_layers]
+
+        content_output = vgg.get_layer(self.content_layer).output
+
+        outputs = style_outputs + [content_output]
+
+        self.model = tf.keras.models.Model(inputs=vgg.input, outputs=outputs)
