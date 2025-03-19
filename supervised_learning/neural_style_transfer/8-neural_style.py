@@ -83,9 +83,11 @@ class NST:
         x = base_vgg.input
         for layer in base_vgg.layers[1:]:  # skip the InputLayer
             if isinstance(layer, tf.keras.layers.MaxPooling2D):
-                x = tf.keras.layers.AveragePooling2D(pool_size=layer.pool_size,
-                                              strides=layer.strides,
-                                              padding=layer.padding)(x)
+                x = tf.keras.layers.AveragePooling2D(
+                    pool_size=layer.pool_size,
+                    strides=layer.strides,
+                    padding=layer.padding
+                )(x)
             else:
                 x = layer(x)
 
@@ -143,8 +145,7 @@ class NST:
         err_1 = "style_output must be a tensor of rank 4"
         if not isinstance(style_output, (tf.Tensor, tf.Variable)):
             raise TypeError(err_1)
-        if len(style_output.shape) != 4:
-            raise TypeError(err_1)
+        err_2 = "gram_target must be a tensor of shape [1, {}, {}]".format(c, c)
         err_2 = ("gram_target must be a tensor of shape [1, {}, {}]".
                  format(c, c))
         if not isinstance(gram_target, (tf.Tensor, tf.Variable)):
@@ -170,10 +171,7 @@ class NST:
 
         style_costs = []
         weight = 1 / len(self.style_layers)
-
-        for style_output, gram_target in zip(
-                style_outputs, self.gram_style_features):
-
+        for style_output, gram_target in zip(style_outputs, self.gram_style_features):
             layer_style_cost = self.layer_style_cost(style_output, gram_target)
             weighted_layer_style_cost = weight * layer_style_cost
             style_costs.append(weighted_layer_style_cost)
