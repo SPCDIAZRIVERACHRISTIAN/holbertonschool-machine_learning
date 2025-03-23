@@ -15,7 +15,8 @@ class Exponential:
 
         Args:
             data (list, optional): List of data to estimate distribution
-            lambtha (float, optional): Expected number of occurrences in a time frame
+            lambtha (float, optional): Expected number
+                of occurrences in a time frame
 
         Raises:
             ValueError: If lambtha is not positive
