@@ -69,3 +69,27 @@ class Poisson:
 
         # Calculate PMF
         return (lambda_k * e_neg_lambda) / k_factorial
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of successes
+
+        Args:
+            k: Number of successes
+
+        Returns:
+            float: CDF value for k
+        """
+        # Convert k to integer if it's not already
+        k = int(k)
+
+        # Check if k is out of range (k must be non-negative for Poisson)
+        if k < 0:
+            return 0
+
+        # Calculate CDF: P(X <= k) = sum(P(X = i)) for i from 0 to k
+        cdf_value = 0
+        for i in range(k + 1):
+            cdf_value += self.pmf(i)
+
+        return cdf_value
