@@ -4,6 +4,9 @@ Module for representing a Normal distribution
 """
 
 
+import math
+
+
 class Normal:
     """
     Class that represents a Normal distribution
